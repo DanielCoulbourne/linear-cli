@@ -130,17 +130,17 @@ func runProjectsList(cmd *cobra.Command, args []string) error {
 	output, _ := cmd.Root().PersistentFlags().GetString("output")
 	team, _ := cmd.Flags().GetString("team")
 
-	filterStr := ""
+	filterClause := ""
 	if team != "" {
 		teamID, err := resolveTeamID(client, team)
 		if err != nil {
 			return err
 		}
-		filterStr = fmt.Sprintf(`filter: { members: { id: { eq: "%s" } } }`, teamID)
+		filterClause = fmt.Sprintf(`(filter: { members: { id: { eq: "%s" } } })`, teamID)
 	}
 
 	query := fmt.Sprintf(`query {
-		projects(%s) {
+		projects%s {
 			nodes {
 				id
 				name
@@ -152,7 +152,7 @@ func runProjectsList(cmd *cobra.Command, args []string) error {
 				initiatives { nodes { name } }
 			}
 		}
-	}`, filterStr)
+	}`, filterClause)
 
 	var result struct {
 		Projects struct {
