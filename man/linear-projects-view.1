@@ -2,20 +2,25 @@
 .TH "LINEAR" "1" "Mar 2026" "linear-cli" ""
 
 .SH NAME
-linear-projects - Manage Linear projects
+linear-projects-view - View a single project
 
 
 .SH SYNOPSIS
-\fBlinear projects [flags]\fP
+\fBlinear projects view [name] [flags]\fP
 
 
 .SH DESCRIPTION
-List, view, create, and update projects in Linear.
+View details of a specific project by name.
+
+.PP
+Examples:
+  linear projects view "My Project"
+  linear projects view "My Project" -o json
 
 
 .SH OPTIONS
 \fB-h\fP, \fB--help\fP[=false]
-	help for projects
+	help for view
 
 
 .SH OPTIONS INHERITED FROM PARENT COMMANDS
@@ -24,7 +29,7 @@ List, view, create, and update projects in Linear.
 
 
 .SH SEE ALSO
-\fBlinear(1)\fP, \fBlinear-projects-create(1)\fP, \fBlinear-projects-list(1)\fP, \fBlinear-projects-update(1)\fP, \fBlinear-projects-view(1)\fP
+\fBlinear-projects(1)\fP
 
 
 .SH HISTORY

@@ -17,6 +17,7 @@ Examples:
   linear issues list                          # Your assigned issues
   linear issues list --team ENG               # Issues for team ENG
   linear issues list --status "In Progress"   # Filter by status
+  linear issues list --project "My Project"   # Filter by project
   linear issues list --limit 50               # Show more results
   linear issues list -o json                  # JSON output
 
@@ -32,6 +33,10 @@ Examples:
 .PP
 \fB--limit\fP=25
 	Maximum number of results
+
+.PP
+\fB--project\fP=""
+	Filter by project name
 
 .PP
 \fB--status\fP=""
