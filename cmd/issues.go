@@ -24,6 +24,7 @@ Examples:
   linear issues list                          # Your assigned issues
   linear issues list --team ENG               # Issues for team ENG
   linear issues list --status "In Progress"   # Filter by status
+  linear issues list --project "My Project"   # Filter by project
   linear issues list --limit 50               # Show more results
   linear issues list -o json                  # JSON output`,
 	RunE: runIssuesList,
@@ -79,6 +80,7 @@ func init() {
 	issuesListCmd.Flags().String("team", "", "Filter by team key (e.g. ENG)")
 	issuesListCmd.Flags().String("status", "", "Filter by status name")
 	issuesListCmd.Flags().String("assignee", "", "Filter by assignee (use 'me' for yourself)")
+	issuesListCmd.Flags().String("project", "", "Filter by project name")
 	issuesListCmd.Flags().Int("limit", 25, "Maximum number of results")
 
 	// create flags
@@ -110,6 +112,7 @@ func runIssuesList(cmd *cobra.Command, args []string) error {
 	team, _ := cmd.Flags().GetString("team")
 	status, _ := cmd.Flags().GetString("status")
 	assignee, _ := cmd.Flags().GetString("assignee")
+	projectName, _ := cmd.Flags().GetString("project")
 	limit, _ := cmd.Flags().GetInt("limit")
 	output, _ := cmd.Root().PersistentFlags().GetString("output")
 
@@ -124,6 +127,13 @@ func runIssuesList(cmd *cobra.Command, args []string) error {
 		filters = append(filters, `assignee: { isMe: { eq: true } }`)
 	} else if assignee != "" {
 		filters = append(filters, fmt.Sprintf(`assignee: { displayName: { containsIgnoreCase: "%s" } }`, assignee))
+	}
+	if projectName != "" {
+		projectID, err := resolveProjectID(client, projectName)
+		if err != nil {
+			return err
+		}
+		filters = append(filters, fmt.Sprintf(`project: { id: { eq: "%s" } }`, projectID))
 	}
 
 	filterStr := ""
@@ -140,6 +150,7 @@ func runIssuesList(cmd *cobra.Command, args []string) error {
 				priority
 				assignee { displayName }
 				team { key }
+				project { name }
 				updatedAt
 			}
 		}
